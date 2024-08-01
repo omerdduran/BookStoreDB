@@ -1,0 +1,88 @@
+CREATE DATABASE BOOK_STORE;
+
+USE BOOK_STORE;
+
+CREATE TABLE AUTHOR (
+    AuthorID INT PRIMARY KEY,
+    Name VARCHAR(255),
+    Bio TEXT
+);
+
+CREATE TABLE CATEGORY (
+    CategoryID INT PRIMARY KEY,
+    CategoryName VARCHAR(255)
+);
+
+CREATE TABLE PUBLISHER (
+    PublisherID INT PRIMARY KEY,
+    PublisherName VARCHAR(255),
+    ContactEmail VARCHAR(255)
+);
+
+CREATE TABLE BOOK (
+    BookID INT PRIMARY KEY,
+    Title VARCHAR(255),
+    AuthorID INT,
+    CategoryID INT,
+    PublisherID INT,
+    Price DECIMAL (10, 2),
+    ISBN VARCHAR(255),
+    Stock INT,
+    FOREIGN KEY (AuthorID) REFERENCES AUTHOR(AuthorID),
+    FOREIGN KEY (CategoryID) REFERENCES CATEGORY(CategoryID),
+    FOREIGN KEY (PublisherID) REFERENCES PUBLISHER(PublisherID)
+);
+
+CREATE TABLE CUSTOMER (
+    CustomerID INT PRIMARY KEY,
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    Email VARCHAR(255),
+    Phone VARCHAR(255)
+);
+
+CREATE TABLE ADDRESS (
+    AddressID INT PRIMARY KEY,
+    CustomerID INT,
+    Street VARCHAR(255),
+    City VARCHAR(255),
+    State VARCHAR(255),
+    ZipCode VARCHAR(255),
+    FOREIGN KEY (CustomerID) REFERENCES CUSTOMER(CustomerID)
+);
+CREATE TABLE CUSTOMER_ORDER (
+    OrderID INT PRIMARY KEY,
+    CustomerID INT,
+    OrderDate DATE,
+    TotalAmount DECIMAL (10, 2),
+    FOREIGN KEY (CustomerID) REFERENCES CUSTOMER(CustomerID)
+);
+
+CREATE TABLE ORDER_DETAIL (
+    OrderDetailID INT PRIMARY KEY,
+    OrderID INT,
+    BookID INT,
+    Quantity INT,
+    Price DECIMAL (10, 2),
+    FOREIGN KEY (OrderID) REFERENCES CUSTOMER_ORDER(OrderID),
+    FOREIGN KEY (BookID) REFERENCES BOOK(BookID)
+);
+
+CREATE TABLE REVIEW (
+    ReviewID INT PRIMARY KEY,
+    BookID INT,
+    CustomerID INT,
+    Rating INT,
+    ReviewText TEXT,
+    FOREIGN KEY (BookID) REFERENCES BOOK(BookID),
+    FOREIGN KEY (CustomerID) REFERENCES CUSTOMER(CustomerID)
+);
+
+CREATE TABLE PAYMENT (
+    PaymentID INT PRIMARY KEY,
+    OrderID INT,
+    PaymentMethod VARCHAR(255),
+    PaymentDate DATE,
+    Amount DECIMAL (10, 2),
+    FOREIGN KEY (OrderID) REFERENCES CUSTOMER_ORDER(OrderID)
+);
